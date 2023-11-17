@@ -25,7 +25,8 @@ public class BackCoursesApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		User user = new User();
+
+		/*User user = new User();
 
 		user.setName("Ignacio");
 		user.setLastName("Alvarez");
@@ -46,6 +47,6 @@ public class BackCoursesApplication implements CommandLineRunner {
 		userRoles.add(userRole);
 
 		User savedUser = userService.saveUser(user, userRoles);
-		System.out.println(savedUser.getUsername());
+		System.out.println(savedUser.getUsername());*/
 	}
 }

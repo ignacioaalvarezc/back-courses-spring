@@ -1,5 +1,6 @@
 package com.sys.courses.back.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,5 +29,6 @@ public class User {
     private String profile;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
+    @JsonIgnore
     private Set<UserRole> userRoles = new HashSet<>();
 }
