@@ -1,4 +1,4 @@
-package com.sys.courses.back.infra.security;
+package com.sys.courses.back.infra.errors;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

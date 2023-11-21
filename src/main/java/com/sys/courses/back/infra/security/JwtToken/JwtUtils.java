@@ -1,4 +1,4 @@
-package com.sys.courses.back.infra.security;
+package com.sys.courses.back.infra.security.JwtToken;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

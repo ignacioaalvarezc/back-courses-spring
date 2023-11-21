@@ -1,4 +1,4 @@
-package com.sys.courses.back.infra.security;
+package com.sys.courses.back.infra.security.JwtToken;
 
 import com.sys.courses.back.services.impl.UserDetailsServiceImpl;
 import io.jsonwebtoken.ExpiredJwtException;
