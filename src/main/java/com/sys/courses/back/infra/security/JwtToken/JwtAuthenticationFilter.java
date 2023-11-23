@@ -1,7 +1,10 @@
 package com.sys.courses.back.infra.security.JwtToken;
 
+import com.sys.courses.back.controllers.AuthenticationController;
 import com.sys.courses.back.services.impl.UserDetailsServiceImpl;
 import io.jsonwebtoken.ExpiredJwtException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,11 +28,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtils jwtUtils;
 
+    private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain)
             throws ServletException, IOException {
+
         String requestTokenHeader = request.getHeader("Authorization");
         String username = null;
         String jwtToken = null;
@@ -54,11 +61,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                log.info("Autenticacion exitosa para el usuario: {}", username);
+            } else {
+                log.error("El token no es válido");
             }
-            else {
-                System.out.println("El token no es válido");
-            }
-            filterChain.doFilter(request, response);
         }
+        filterChain.doFilter(request, response);
     }
 }
