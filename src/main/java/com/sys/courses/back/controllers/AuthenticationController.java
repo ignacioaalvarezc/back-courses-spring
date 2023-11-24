@@ -1,6 +1,7 @@
 package com.sys.courses.back.controllers;
 
 // IMPORTS
+import com.sys.courses.back.models.User;
 import com.sys.courses.back.infra.security.JwtToken.JwtRequest;
 import com.sys.courses.back.infra.security.JwtToken.JwtResponse;
 import com.sys.courses.back.infra.security.JwtToken.JwtUtils;
@@ -11,12 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @CrossOrigin("*")
@@ -47,6 +49,17 @@ public class AuthenticationController {
     }
 
     private void authenticate(String username, String password) throws Exception{
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        try{
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        } catch (DisabledException exception) {
+            throw new Exception("Usuario deshabilitado " + exception.getMessage());
+        } catch (BadCredentialsException e) {
+            throw new Exception("Credenciales inválidas " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/current-user")
+    public User getCurrentUser(Principal principal) {
+        return (User) this.userDetailsService.loadUserByUsername(principal.getName());
     }
 }
