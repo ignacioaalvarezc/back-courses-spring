@@ -1,6 +1,7 @@
 package com.sys.courses.back.controllers;
 
 // IMPORTS
+import com.sys.courses.back.infra.exceptions.UserNotFoundException;
 import com.sys.courses.back.models.User;
 import com.sys.courses.back.infra.security.JwtToken.JwtRequest;
 import com.sys.courses.back.infra.security.JwtToken.JwtResponse;
@@ -36,13 +37,13 @@ public class AuthenticationController {
     private static final Logger log = LoggerFactory.getLogger(AuthenticationController.class);
 
     @PostMapping("/generate-token")
-    public ResponseEntity<?> generateToken(@RequestBody JwtRequest jwtRequest) {
+    public ResponseEntity<?> generateToken(@RequestBody JwtRequest jwtRequest) throws Exception {
         try {
             authenticate(jwtRequest.getUsername(), jwtRequest.getPassword());
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(jwtRequest.getUsername());
             String token = this.jwtUtils.generateToken(userDetails);
             return ResponseEntity.ok(new JwtResponse(token));
-        } catch (Exception e) {
+        } catch (UserNotFoundException e) {
             log.error("Error al generar el token: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error en la autentificacion");
         }
@@ -59,7 +60,17 @@ public class AuthenticationController {
     }
 
     @GetMapping("/current-user")
-    public User getCurrentUser(Principal principal) {
-        return (User) this.userDetailsService.loadUserByUsername(principal.getName());
+    public ResponseEntity<?> getCurrentUser(Principal principal) {
+        try {
+            if (principal == null) {
+                throw new UserNotFoundException("No se ha autenticado ningún usuario");
+            }
+            String username = principal.getName();
+            User currentUser = (User) this.userDetailsService.loadUserByUsername(username);
+            return ResponseEntity.ok(currentUser);
+        } catch (UserNotFoundException e) {
+            log.error("Error al obtener el usuario actual: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no autenticado");
+        }
     }
 }

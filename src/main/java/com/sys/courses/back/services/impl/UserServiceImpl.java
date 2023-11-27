@@ -1,5 +1,6 @@
 package com.sys.courses.back.services.impl;
 
+import com.sys.courses.back.infra.exceptions.UserFoundException;
 import com.sys.courses.back.models.User;
 import com.sys.courses.back.models.UserRole;
 import com.sys.courses.back.repositories.RoleRepository;
@@ -24,7 +25,7 @@ public class UserServiceImpl implements UserService {
         User userLocal = userRepository.findByUsername(user.getUsername());
         if(userLocal != null) {
             System.out.println("El usuario ya existe");
-            throw new Exception("El usuario ya esta presente");
+            throw new UserFoundException("El usuario ya esta presente");
         }
         else {
             for(UserRole userRole:userRoles) {
