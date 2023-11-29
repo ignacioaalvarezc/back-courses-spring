@@ -1,5 +1,6 @@
 package com.sys.courses.back.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,5 +22,6 @@ public class Category {
     private String tittle;
     private String description;
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Exam> exams = new LinkedHashSet<>();
 }
