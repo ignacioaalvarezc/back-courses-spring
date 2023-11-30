@@ -40,6 +40,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User saveAdmin(User user, Set<UserRole> userRoles) throws Exception {
+        User userLocal = userRepository.findByUsername(user.getUsername());
+        if(userLocal != null) {
+            System.out.println("El usuario ya existe");
+            throw new UserFoundException("El usuario ya esta presente");
+        }
+        else {
+            for(UserRole userRole:userRoles) {
+                roleRepository.save(userRole.getRole());
+            }
+            user.getUserRoles().addAll(userRoles);
+            userLocal = userRepository.save(user);
+        }
+        return userLocal;
+    }
+
+    @Override
     public User getUser(String username) {
         return userRepository.findByUsername(username);
     }

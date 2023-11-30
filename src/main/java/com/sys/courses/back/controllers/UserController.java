@@ -40,6 +40,22 @@ public class UserController {
         return userService.saveUser(user, userRoles);
     }
 
+    @PostMapping("/save-admin")
+    public User saveAdmin(@RequestBody User user) throws Exception {
+        user.setProfile("default.png");
+        user.setPassword(this.bCryptPasswordEncoder.encode(user.getPassword()));
+        Set<UserRole> userRoles = new HashSet<>();
+        Role role = new Role();
+        role.setRoleId(1L);
+        role.setName("ADMIN");
+        UserRole userRole = new UserRole();
+        userRole.setUser(user);
+        userRole.setRole(role);
+        userRoles.add(userRole);
+
+        return userService.saveUser(user, userRoles);
+    }
+
     @GetMapping("/{username}")
     public User getUser(@PathVariable("username") String username) {
         return userService.getUser(username);
