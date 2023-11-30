@@ -1,6 +1,7 @@
 package com.sys.courses.back.services.impl;
 
 import com.sys.courses.back.infra.exceptions.UserFoundException;
+import com.sys.courses.back.models.Category;
 import com.sys.courses.back.models.User;
 import com.sys.courses.back.models.UserRole;
 import com.sys.courses.back.repositories.RoleRepository;
@@ -9,6 +10,7 @@ import com.sys.courses.back.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Service
@@ -40,6 +42,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUser(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId).get();
+    }
+
+    @Override
+    public Set<User> getUsers() {
+        return new LinkedHashSet<>(userRepository.findAll());
     }
 
     @Override

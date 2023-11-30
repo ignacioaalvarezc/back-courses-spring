@@ -1,10 +1,12 @@
 package com.sys.courses.back.controllers;
 
+import com.sys.courses.back.models.Category;
 import com.sys.courses.back.models.Role;
 import com.sys.courses.back.models.User;
 import com.sys.courses.back.models.UserRole;
 import com.sys.courses.back.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +25,7 @@ public class UserController {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping("/")
-    public User saveUser(@RequestBody User user) throws Exception{
+    public User saveUser(@RequestBody User user) throws Exception {
         user.setProfile("default.png");
         user.setPassword(this.bCryptPasswordEncoder.encode(user.getPassword()));
         Set<UserRole> userRoles = new HashSet<>();
@@ -41,6 +43,17 @@ public class UserController {
     @GetMapping("/{username}")
     public User getUser(@PathVariable("username") String username) {
         return userService.getUser(username);
+    }
+
+
+    @GetMapping("/{userId}")
+    public User listUserById(@PathVariable("userId") Long userId) {
+        return userService.getUserById(userId);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<?> listUsers() {
+        return ResponseEntity.ok(userService.getUsers());
     }
 
     @DeleteMapping("/{userId}")
