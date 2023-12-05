@@ -1,7 +1,8 @@
 package com.sys.courses.back.services.impl;
 
+import com.sys.courses.back.dto.UserDto;
 import com.sys.courses.back.infra.exceptions.UserFoundException;
-import com.sys.courses.back.models.Category;
+import com.sys.courses.back.infra.exceptions.UserNotFoundException;
 import com.sys.courses.back.models.User;
 import com.sys.courses.back.models.UserRole;
 import com.sys.courses.back.repositories.RoleRepository;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service

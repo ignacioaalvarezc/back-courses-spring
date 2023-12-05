@@ -4,7 +4,6 @@ import com.sys.courses.back.models.Exam;
 import com.sys.courses.back.models.Question;
 import com.sys.courses.back.services.ExamService;
 import com.sys.courses.back.services.QuestionService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +26,7 @@ public class QuestionController {
 
     @PostMapping("/")
     public ResponseEntity<Question> saveQuestion(@RequestBody Question question) {
-        return ResponseEntity.ok(questionService.addQuestion(question));
+        return ResponseEntity.ok(questionService.saveQuestion(question));
     }
 
     @PutMapping("/")
@@ -36,7 +35,7 @@ public class QuestionController {
     }
 
     @GetMapping("/exam/{examId}")
-    public ResponseEntity<?> listQuestionsOfExam(@PathVariable("examId") Long examId) {
+    public ResponseEntity<?> listExamQuestions(@PathVariable("examId") Long examId) {
         Exam exam = examService.getExam(examId);
         Set<Question> questions = exam.getQuestions();
 
@@ -57,5 +56,13 @@ public class QuestionController {
     @DeleteMapping("/{questionId}")
     public void deleteQuestion(@PathVariable("questionId") Long questionId) {
         questionService.deleteQuestion(questionId);
+    }
+
+    @GetMapping("/exam/all/{examId}")
+    public ResponseEntity<?> listExamQuestionsAsAnAdmin(@PathVariable("examId") Long examId) {
+        Exam exam = new Exam();
+        exam.setExamId(examId);
+        Set<Question> questions = questionService.getExamQuestions(exam);
+        return ResponseEntity.ok(questions);
     }
 }

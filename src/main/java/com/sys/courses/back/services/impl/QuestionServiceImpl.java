@@ -16,7 +16,7 @@ public class QuestionServiceImpl implements QuestionService {
     private QuestionRepository questionRepository;
 
     @Override
-    public Question addQuestion(Question question) {
+    public Question saveQuestion(Question question) {
         return questionRepository.save(question);
     }
 
@@ -36,7 +36,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Set<Question> getQuestionsOfExam(Exam exam) {
+    public Set<Question> getExamQuestions(Exam exam) {
         return questionRepository.findByExam(exam);
     }
 

@@ -1,5 +1,7 @@
 package com.sys.courses.back.services;
 
+import com.sys.courses.back.dto.UserDto;
+import com.sys.courses.back.infra.exceptions.UserNotFoundException;
 import com.sys.courses.back.models.Category;
 import com.sys.courses.back.models.User;
 import com.sys.courses.back.models.UserRole;
@@ -18,4 +20,5 @@ public interface UserService {
     User getUserById(Long userId);
 
     public void deleteUser(Long userId);
+
 }

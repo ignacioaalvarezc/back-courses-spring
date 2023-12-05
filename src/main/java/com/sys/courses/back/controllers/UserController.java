@@ -1,10 +1,13 @@
 package com.sys.courses.back.controllers;
 
+import com.sys.courses.back.dto.UserDto;
+import com.sys.courses.back.infra.exceptions.UserNotFoundException;
 import com.sys.courses.back.models.Category;
 import com.sys.courses.back.models.Role;
 import com.sys.courses.back.models.User;
 import com.sys.courses.back.models.UserRole;
 import com.sys.courses.back.services.UserService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -81,5 +84,4 @@ public class UserController {
     public User getCurrentUser() {
         return new User();
     }
-
 }

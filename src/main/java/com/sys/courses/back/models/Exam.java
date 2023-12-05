@@ -19,7 +19,7 @@ public class Exam {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long examId;
-    private String tittle;
+    private String title;
     private String description;
     private String maxScore;
     private String questionsAmount;
