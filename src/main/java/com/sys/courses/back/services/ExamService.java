@@ -14,5 +14,7 @@ public interface ExamService {
     Exam getExam(Long examId);
     void deleteExam(Long examId);
     List<Exam> listExamsOfACategory(Category category);
+    List<Exam> getExamsEnabled();
+    List<Exam> getExamsEnabledOfACategory(Category category);
 
 }

@@ -49,4 +49,17 @@ public class ExamController {
         category.setCategoryId(categoryId);
         return examService.listExamsOfACategory(category);
     }
+
+    @GetMapping("/enabled")
+    public List<Exam> listExamsEnabled() {
+        return examService.getExamsEnabled();
+    }
+
+    @GetMapping("/category/enabled/{categoryId}")
+    public List<Exam> listExamsEnabledOfACategory(@PathVariable("categoryId") Long categoryId) {
+        Category category = new Category();
+        category.setCategoryId(categoryId);
+        return examService.getExamsEnabledOfACategory(category);
+    }
+
 }

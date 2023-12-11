@@ -8,4 +8,7 @@ import java.util.List;
 
 public interface ExamRepository extends JpaRepository<Exam, Long> {
     List<Exam> findByCategory(Category category);
+    List<Exam> findByEnabled(Boolean enabled);
+
+    List<Exam> findByCategoryAndEnabled(Category category, Boolean enabled);
 }
