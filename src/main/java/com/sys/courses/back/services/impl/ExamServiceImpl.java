@@ -1,5 +1,6 @@
 package com.sys.courses.back.services.impl;
 
+import com.sys.courses.back.models.Category;
 import com.sys.courses.back.models.Exam;
 import com.sys.courses.back.repositories.ExamRepository;
 import com.sys.courses.back.services.ExamService;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -40,5 +42,10 @@ public class ExamServiceImpl implements ExamService {
         Exam exam = new Exam();
         exam.setExamId(examId);
         examRepository.delete(exam);
+    }
+
+    @Override
+    public List<Exam>  listExamsOfACategory(Category category) {
+        return this.examRepository.findByCategory(category);
     }
 }

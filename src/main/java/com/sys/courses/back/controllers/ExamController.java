@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/exams")
 @CrossOrigin("*")
@@ -41,4 +43,10 @@ public class ExamController {
         examService.deleteExam(examId);
     }
 
+    @GetMapping("/category/{categoryId}")
+    public List<Exam> listExamsOfACategory(@PathVariable("categoryId") Long categoryId) {
+        Category category = new Category();
+        category.setCategoryId(categoryId);
+        return examService.listExamsOfACategory(category);
+    }
 }
