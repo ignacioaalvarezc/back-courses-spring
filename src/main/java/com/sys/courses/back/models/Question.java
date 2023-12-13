@@ -24,6 +24,8 @@ public class Question {
     private String secondOption;
     private String thirdOption;
     private String fourthOption;
+    @Transient
+    private String givenAnswer;
     private String answer;
     @ManyToOne(fetch = FetchType.EAGER)
     private Exam exam;

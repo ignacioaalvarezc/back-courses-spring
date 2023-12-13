@@ -50,12 +50,12 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public List<Exam> getExamsEnabled() {
+    public List<Exam> getEnabledExams() {
         return examRepository.findByEnabled(true);
     }
 
     @Override
-    public List<Exam> getExamsEnabledOfACategory(Category category) {
+    public List<Exam> getEnabledExamsOfACategory(Category category) {
         return examRepository.findByCategoryAndEnabled(category, true);
     }
 }

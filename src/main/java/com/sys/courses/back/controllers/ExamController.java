@@ -2,7 +2,6 @@ package com.sys.courses.back.controllers;
 
 import com.sys.courses.back.models.Category;
 import com.sys.courses.back.models.Exam;
-import com.sys.courses.back.services.CategoryService;
 import com.sys.courses.back.services.ExamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -51,15 +50,15 @@ public class ExamController {
     }
 
     @GetMapping("/enabled")
-    public List<Exam> listExamsEnabled() {
-        return examService.getExamsEnabled();
+    public List<Exam> listEnabledExams() {
+        return examService.getEnabledExams();
     }
 
     @GetMapping("/category/enabled/{categoryId}")
-    public List<Exam> listExamsEnabledOfACategory(@PathVariable("categoryId") Long categoryId) {
+    public List<Exam> listEnabledExamsOfACategory(@PathVariable("categoryId") Long categoryId) {
         Category category = new Category();
         category.setCategoryId(categoryId);
-        return examService.getExamsEnabledOfACategory(category);
+        return examService.getEnabledExamsOfACategory(category);
     }
 
 }
