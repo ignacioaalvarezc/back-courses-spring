@@ -1,11 +1,13 @@
 package com.sys.courses.back.controllers;
 
 // IMPORTS
+import com.sys.courses.back.infra.exceptions.UserDisabledException;
 import com.sys.courses.back.infra.exceptions.UserNotFoundException;
 import com.sys.courses.back.models.User;
 import com.sys.courses.back.infra.security.JwtToken.JwtRequest;
 import com.sys.courses.back.infra.security.JwtToken.JwtResponse;
 import com.sys.courses.back.infra.security.JwtToken.JwtUtils;
+import com.sys.courses.back.services.UserService;
 import com.sys.courses.back.services.impl.UserDetailsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +34,9 @@ public class AuthenticationController {
     private UserDetailsServiceImpl userDetailsService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private JwtUtils jwtUtils;
 
     private static final Logger log = LoggerFactory.getLogger(AuthenticationController.class);
@@ -39,13 +44,17 @@ public class AuthenticationController {
     @PostMapping("/generate-token")
     public ResponseEntity<?> generateToken(@RequestBody JwtRequest jwtRequest) throws Exception {
         try {
+            User user = userService.getUserByUsername(jwtRequest.getUsername());
+            if (!user.isEnabled()) {
+                throw new UserDisabledException("Usuario bloqueado");
+            }
             authenticate(jwtRequest.getUsername(), jwtRequest.getPassword());
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(jwtRequest.getUsername());
             String token = this.jwtUtils.generateToken(userDetails);
             return ResponseEntity.ok(new JwtResponse(token));
-        } catch (UserNotFoundException e) {
+        } catch (UserNotFoundException | UserDisabledException e) {
             log.error("Error al generar el token: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error en la autentificacion");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
 

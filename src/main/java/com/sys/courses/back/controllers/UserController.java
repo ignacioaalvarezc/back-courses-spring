@@ -9,11 +9,13 @@ import com.sys.courses.back.models.UserRole;
 import com.sys.courses.back.services.UserService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @RestController
@@ -84,4 +86,26 @@ public class UserController {
     public User getCurrentUser() {
         return new User();
     }
+
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<User> updateUser(@PathVariable("userId") Long userId,
+                                           @RequestBody User user) {
+        try {
+            user.setUserId(userId);
+            User updatedUser = userService.updateUser(user);
+            return ResponseEntity.ok(updatedUser);
+        } catch (UserNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    @PutMapping("/toggle-status/{userId}")
+    public ResponseEntity<String> toggleUserStatus(@PathVariable("userId") Long userId,
+                                                   @RequestBody Map<String, Boolean> statusMap) {
+        boolean newStatus = statusMap.get("enabled");
+        userService.toggleUserStatus(userId, newStatus);
+        return ResponseEntity.ok("Estado del usuario cambiado exitosamente");
+    }
+
 }

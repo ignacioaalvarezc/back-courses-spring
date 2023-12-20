@@ -9,6 +9,7 @@ import com.sys.courses.back.repositories.RoleRepository;
 import com.sys.courses.back.repositories.UserRepository;
 import com.sys.courses.back.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashSet;
@@ -23,6 +24,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public User saveUser(User user, Set<UserRole> userRoles) throws Exception {
@@ -58,6 +62,7 @@ public class UserServiceImpl implements UserService {
         return userLocal;
     }
 
+
     @Override
     public User getUser(String username) {
         return userRepository.findByUsername(username);
@@ -69,6 +74,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    @Override
     public Set<User> getUsers() {
         return new LinkedHashSet<>(userRepository.findAll());
     }
@@ -76,5 +86,30 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);
+    }
+
+
+    @Override
+    public User updateUser(User user) throws UserNotFoundException {
+        User userLocal = userRepository.findById(user.getUserId())
+                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
+
+        userLocal.setName(user.getName());
+        userLocal.setLastName(user.getLastName());
+        userLocal.setPassword(this.bCryptPasswordEncoder.encode(user.getPassword()));
+        userLocal.setUsername(user.getUsername());
+        userLocal.setEmail(user.getEmail());
+        userLocal.setPhoneNumber(user.getPhoneNumber());
+        userLocal.setProfile("default.png");
+        return userRepository.save(userLocal);
+    }
+
+    @Override
+    public void toggleUserStatus(Long userId, boolean newStatus) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user != null) {
+            user.setEnabled(newStatus);
+            userRepository.save(user);
+        }
     }
 }
